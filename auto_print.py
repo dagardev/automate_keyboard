@@ -5,8 +5,8 @@ from pynput import keyboard
 is_paused = False
 
 # ===== INPUT =====
-choice = input("Press 'Print' to start auto print, or 'SFG' to start auto sfg: ").upper()
-delay = int(input("Enter time in Milliseconds: ")) / 1000
+#choice = input("Press 'Print' to start auto print, or 'SFG' to start auto sfg: ").upper()
+#delay = int(input("Enter time in Milliseconds: ")) / 1000
 
 # ===== SETUP =====
 def on_pause_key(key):
