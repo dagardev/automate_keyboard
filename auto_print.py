@@ -4,19 +4,15 @@ from pynput import keyboard
 # ===== GLOBALS =====
 is_paused = False
 
-# ===== INPUT =====
-choice = input("Press 'Print' to start auto print, or 'SFG' to start auto sfg: ").upper()
-delay = int(input("Enter time in Milliseconds: ")) / 1000
-
 # ===== SETUP =====
 def on_pause_key(key):
-    """Handle pause/resume on spacebar press"""
+    """Handle pause/resume on F3 press"""
     global is_paused
     try:
-        if key == keyboard.Key.space:
+        if key == keyboard.Key.f3:
             is_paused = not is_paused
             status = "PAUSED" if is_paused else "RESUMED"
-            print(f"\n>>> {status} (Press SPACE to toggle) <<<")
+            print(f"\n>>> {status} (Press F3 to toggle) <<<")
     except AttributeError:
         pass
 
@@ -24,7 +20,7 @@ def start_pause_listener():
     """Start listening for pause key"""
     listener = keyboard.Listener(on_press=on_pause_key)
     listener.start()
-    print("\n>>> Press SPACE to pause/resume <<<")
+    print("\n>>> Press F3 to pause/resume <<<")
     return listener
 
 def prepare():
@@ -68,11 +64,11 @@ def auto_print_mode():
         pyautogui.sleep(delay)
 
 def auto_sfg_mode():
-    print("You have chosen SFG mode.")
-    print("Open first excel window next 'SFG' window")
+    print(f"You have chosen {choice} mode.")
+    print(f"Open first excel window next {choice} window")
     prepare()
     start_pause_listener()
-    print("SFG starting...")
+    print(f"{choice} starting...")
     
     while True:
         # Check if paused
@@ -93,6 +89,69 @@ def auto_sfg_mode():
         pyautogui.sleep(delay)
         pyautogui.hotkey("down")
         pyautogui.sleep(delay)
+def auto_assembly_packing_mode():
+    print(f"You have chosen {choice} mode.")
+    print(f"Open first excel window next 'FCA' {choice} window")
+    prepare()
+    start_pause_listener()
+    print(f"{choice} starting...")
+    
+    while True:
+        # Check if paused
+        while is_paused:
+            pyautogui.sleep(0.1)
+        
+        pyautogui.hotkey("ctrl", "c")      # copy
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("alt", "tab")     # switch window
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("ctrl", "v")      # paste
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("enter")  
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("alt", "tab")     # switch back
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("right")
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("ctrl", "c")      # copy
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("alt", "tab")     # switch back
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("ctrl", "v")      # paste
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("enter")  
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("alt", "tab")     # switch back
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("left")
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("down")
+        pyautogui.sleep(delay)
+
+def auto_weight_mode():
+    print(f"You have chosen {choice} mode.")
+    print(f"Open first excel window next {choice} window")
+    prepare()
+    start_pause_listener()
+    print(f"{choice} starting...")
+    
+    while True:
+        # Check if paused
+        while is_paused:
+            pyautogui.sleep(0.1)
+        
+        pyautogui.hotkey("ctrl", "c")      # copy
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("alt", "tab")     # switch window
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("ctrl", "v")      # paste
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("enter")   
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("alt", "tab")     # switch back
+        pyautogui.sleep(delay)
+        pyautogui.hotkey("down")
+        pyautogui.sleep(delay)
 
 # ===== MAIN =====
 def main():
@@ -100,16 +159,25 @@ def main():
     global choice, delay
     
     # Get user input
-    choice = input("Press 'Print' to start auto print, or 'SFG' to start auto sfg: ").upper()
-    delay = int(input("Enter time in Milliseconds: ")) / 1000
+    choice = input("""
+Press 'Print' to start auto print: 
+Press 'SFG' to start auto sfg: 
+Press 'Assembly' to start auto assembly: 
+Press 'Packing' to start auto assembly: 
+Press 'Weight' to start auto weight: """).upper()
+    delay = int(input("Enter Pause time in Milliseconds: ")) / 1000
     
     # Execute automation mode
     if choice == 'PRINT':
         auto_print_mode()
     elif choice == 'SFG':
         auto_sfg_mode()
+    elif choice in ('ASSEMBLY' or 'PACKING'):
+        auto_assembly_packing_mode()
+    elif choice == 'WEIGHT':
+        auto_weight_mode()
     else:
-        print("Invalid choice. Please restart and choose either 'Print' or 'SFG'.")
+        print("Invalid choice. Please restart and choose again.")
 
 if __name__ == "__main__":
     main()
