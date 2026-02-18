@@ -172,7 +172,7 @@ Press 'Weight' to start auto weight: """).upper()
         auto_print_mode()
     elif choice == 'SFG':
         auto_sfg_mode()
-    elif choice in ('ASSEMBLY' or 'PACKING'):
+    elif choice in ('ASSEMBLY', 'PACKING'):
         auto_assembly_packing_mode()
     elif choice == 'WEIGHT':
         auto_weight_mode()
