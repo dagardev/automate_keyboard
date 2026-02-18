@@ -4,6 +4,7 @@ from pynput import keyboard
 # ===== GLOBALS =====
 is_paused = False
 
+
 # ===== SETUP =====
 def on_pause_key(key):
     """Handle pause/resume on F3 press"""
